@@ -1,0 +1,91 @@
+language: python
+os: linux
+dist: xenial
+notifications:
+  email: change
+
+python:
+  - 3.6
+  - 3.7
+
+env:
+  jobs:
+    - CHECK_TYPE=linting
+    - CHECK_TYPE=docdoctest
+    - CHECK_TYPE=test
+  global:
+    - INSTALL_TYPE=setup
+
+jobs:
+  include:
+    - python: 3.6
+      env:
+        - INSTALL_TYPE=sdist
+        - CHECK_TYPE=test
+    - python: 3.6
+      env:
+        - INSTALL_TYPE=wheel
+        - CHECK_TYPE=test
+
+before_install:
+  - python -m pip install --upgrade pip
+  - if [ "${INSTALL_TYPE}" == "conda" ]; then
+      wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+      bash miniconda.sh -b -p $HOME/miniconda;
+      export PATH="$HOME/miniconda/bin:$PATH";
+      hash -r;
+      conda config --set always_yes yes --set changeps1 no;
+      conda update -q conda;
+      conda env create -f environment.yml;
+      source activate vertigo;
+    fi
+  - if [ "${CHECK_TYPE}" == "linting" ]; then
+      pip install flake8;
+    fi
+  - if [ "${CHECK_TYPE}" == "test" ]; then
+      pip install "pytest>=3.6" pytest-cov coverage codecov;
+    fi
+  - if [ ! -z "${INSTALL_NUMBA}"]; then
+      pip install numba;
+    fi
+
+install:
+  - |
+    if [ "${INSTALL_TYPE}" == "setup" ]; then
+      python setup.py install;
+    elif [ "${INSTALL_TYPE}" == "sdist" ]; then
+      python setup.py sdist;
+      pip install dist/*.tar.gz;
+    elif [ "${INSTALL_TYPE}" == "wheel" ]; then
+      python setup.py bdist_wheel;
+      pip install dist/*.whl;
+    elif [ "${INSTALL_TYPE}" == "conda" ]; then
+      pip install --no-deps .;
+    else
+      false;
+    fi
+
+script:
+  - |
+    if [ "${CHECK_TYPE}" == "linting" ]; then
+      flake8 vertigo;
+    elif [ "${CHECK_TYPE}" == "docdoctest" ]; then
+      cd docs;
+      pip install -r ./requirements.txt;
+      make html;
+      make doctest;
+    elif [ "${CHECK_TYPE}" == "test" ]; then
+      mkdir for_testing && cd for_testing;
+      cp ../setup.cfg .;
+      args="--cov-report term-missing --cov=vertigo --doctest-modules --pyargs";
+      python -m pytest ${args} vertigo;
+    else
+      false;
+    fi
+
+after_success:
+  # codecov with numba installed doesn't make sense, so don't do that
+  - if [ "${CHECK_TYPE}" == "test" ]; then
+      codecov;
+    fi
+

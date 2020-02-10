@@ -1,0 +1,3 @@
+nibabel
+numpy>=1.16
+scipy

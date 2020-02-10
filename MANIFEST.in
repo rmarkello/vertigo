@@ -1,0 +1,2 @@
+include versioneer.py
+include vertigo/_version.py
