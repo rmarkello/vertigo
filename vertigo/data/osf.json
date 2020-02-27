@@ -1,0 +1,39 @@
+{
+    "tpl-fsaverage": {
+        "fsaverage": {
+            "url": [
+                "mb37e",
+                "5c82830a1d73810018bdacea"
+            ],
+            "md5": "1e82c52ed21d06d4e6e7341c725c5262"
+        },
+        "fsaverage3": {
+            "url": [
+                "mb37e",
+                "5d9f83b6f6b03e000e1ba285"
+            ],
+            "md5": "b4182495d341364e3f7c5b86284d8d20"
+        },
+        "fsaverage4": {
+            "url": [
+                "mb37e",
+                "5d9f83b7fcf91f00111c7473"
+            ],
+            "md5": "5a481421dc1286c7bd9b8a47db5fad0b"
+        },
+        "fsaverage5": {
+            "url": [
+                "mb37e",
+                "5d9f83b6f6b03e00101c932f"
+            ],
+            "md5": "cc75f7290c03970a8b8a06dfc215e925"
+        },
+        "fsaverage6": {
+            "url": [
+                "mb37e",
+                "5d9f83b7a7bc73000cea05f1"
+            ],
+            "md5": "8f75b95c0e47ae935d10745baefa2c49"
+        }
+    }
+}
