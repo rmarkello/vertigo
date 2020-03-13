@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Functions for generating surrogate brain maps as in Burtt et al., 2018, Nature
+Functions for generating surrogate brain maps as in Burt et al., 2018, Nature
 Neuroscience.
 """
 
@@ -117,9 +117,8 @@ def make_surrogate(dist, neuro, rho=None, d0=None, seed=None,
     # "are generated according to y_surr = (I - rho_hat * W[d0_hat])^-1 * u"
     # "where u ~ normal(0, 1)"
     w = _make_weight_matrix(dist, d0)
-    u = rs.standard_normal(len(dist))
     i = np.identity(len(dist))
-    surrogate = np.linalg.inv(i - rho * w) @ u
+    surrogate = np.linalg.inv(i - (rho * w)) @ rs.standard_normal(len(dist))
 
     # "to match surrogate map value distributions to the distributon of values"
     # "in the corresponding empirical map, rank-ordered surrogate map values"

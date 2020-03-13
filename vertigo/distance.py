@@ -170,7 +170,7 @@ def get_surface_distance(surf, dlabel=None, medial=None, drop_labels=None,
 
     # get data from dlabel / medial wall files if they provided
     if dlabel is not None:
-        labels = nib.load(dlabel).agg_data()
+        labels = nib.load(dlabel).agg_data().astype(np.int32)
     if medial is not None:
         mask = nib.load(medial).agg_data().astype(bool)
 

@@ -224,7 +224,7 @@ def parcels_to_vertices(data, *, lhannot, rhannot, drop_labels=None):
         not specified, parcels defined in `netneurotools.freesurfer.FSIGNORE`
         are assumed to not be present. Default: None
 
-    Reurns
+    Returns
     ------
     projected : numpy.ndarray
         Vertex-level data
@@ -429,7 +429,7 @@ def _get_fsaverage_spins(version='fsaverage', spins=None, n_rotate=1000,
         coords, hemiid = _get_fsaverage_coords(version, 'sphere')
         spins = gen_spinsamples(coords, hemiid, n_rotate=n_rotate,
                                 **kwargs)
-        if kwargs.get('return_cost'):
+        if kwargs.get('return_cost', False):
             return spins
 
     spins = np.asarray(spins, dtype='int32')
@@ -523,7 +523,7 @@ def spin_data(data, *, lhannot, rhannot, version='fsaverage', n_rotate=1000,
     if verbose:
         print(' ' * len(msg) + '\b' * len(msg), end='', flush=True)
 
-    if kwargs.get('return_cost'):
+    if kwargs.get('return_cost', False):
         return spun, cost
 
     return spun
@@ -630,7 +630,7 @@ def spin_parcels(*, lhannot, rhannot, version='fsaverage', n_rotate=1000,
         regions[:, n] = labeled_comprehension(vertices[spins[:, n]], vertices,
                                               labels, overlap, int, -1)[mask]
 
-    if kwargs.get('return_cost'):
+    if kwargs.get('return_cost', False):
         return regions, cost
 
     return regions
